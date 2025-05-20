@@ -12,15 +12,15 @@ const Badge = ({title}: BadgeProps) => {
   const [badgeWidth, setBadgeWith] = useState(0);
   const textRef = useRef<Text>(null);
   const actualBadgeWidth = {
-    width: horizontalScale(10 * 2 + badgeWidth),
+    width: horizontalScale(12 * 2 + badgeWidth),
   };
 
   return (
     <View style={[styles.badge, actualBadgeWidth]}>
       <Text
-        onTextLayout={({nativeEvent}) =>
-          setBadgeWith(nativeEvent.lines[0].width)
-        }
+        onTextLayout={({nativeEvent}) => {
+          setBadgeWith(nativeEvent.lines[0].width);
+        }}
         ref={textRef}
         style={styles.text}>
         {title}

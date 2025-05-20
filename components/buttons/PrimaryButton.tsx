@@ -24,6 +24,7 @@ const PrimaryButton = (props: PrimaryButtonProps) => {
         style={[
           styles.button,
           {height: verticalScale(50), ...actualTabWith},
+          //   {...actualTabWith},
           !isActive && styles.inactiveTab,
         ]}
         onPress={onPress}>

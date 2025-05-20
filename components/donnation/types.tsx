@@ -3,4 +3,5 @@ export type Donnation = {
   badgeTitle: string;
   donnationTitle: string;
   price: number;
+  onPress: () => void;
 };

@@ -1,8 +1,10 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {DonationInfo} from '../store/slices/donationSlice';
 
 export type RootStackParamList = {
   Home: undefined;
+  DonationDetails: DonationInfo & {category: string};
 };
 
 // prop type for the screens in the main navigation

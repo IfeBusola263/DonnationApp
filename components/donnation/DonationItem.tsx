@@ -1,4 +1,4 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import Badge from '../buttons/Badge';
 import {type Donnation} from './types';
 import Header from '../Header/Header';
@@ -9,22 +9,26 @@ const DonationItem = ({
   badgeTitle,
   donnationTitle,
   price,
+  onPress,
 }: Donnation) => {
   return (
-    <View>
+    <Pressable
+      onPress={onPress}
+      style={({pressed}) => [pressed && {opacity: 0.8}]}>
       <View style={styles.badge}>
         <Badge title={badgeTitle} />
       </View>
-      <Image
-        style={styles.image}
-        source={{uri: imageUri}}
-        resizeMode="contain"
-      />
+      <Image style={styles.image} source={{uri: imageUri}} resizeMode="cover" />
       <View style={styles.donationDetails}>
-        <Header title={donnationTitle} size="medium" color="#0A043C" />
+        <Header
+          title={donnationTitle}
+          size="medium"
+          color="#0A043C"
+          numberOfLines={1}
+        />
         <Header title={`$${price.toFixed(2)}`} size="medium" color="#156CF7" />
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -34,6 +38,7 @@ const styles = StyleSheet.create({
   image: {
     width: horizontalScale(155),
     height: horizontalScale(170),
+    borderRadius: horizontalScale(20),
   },
   badge: {
     position: 'absolute',

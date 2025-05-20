@@ -15,10 +15,12 @@ const getHeaderStyle = (size: sizeProps) => {
   }
 };
 
-const Header = ({title, size, color}: HeaderProps) => {
+const Header = ({title, size, color, numberOfLines}: HeaderProps) => {
   return (
     <View>
-      <Text style={[getHeaderStyle(size), color && {color: color}]}>
+      <Text
+        style={[getHeaderStyle(size), color && {color: color}]}
+        numberOfLines={numberOfLines}>
         {title}
       </Text>
     </View>

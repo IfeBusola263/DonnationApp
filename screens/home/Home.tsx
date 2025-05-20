@@ -10,12 +10,10 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/Header/Header';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
-import Badge from '../../components/buttons/Badge';
 import SearchBar from '../../components/search/SeacrhBar';
-// import {SearchBar as Bar} from 'react-native-screens';
+import {type NativeStackScreenProps} from '@react-navigation/native-stack';
 import DonationItem from '../../components/donnation/DonationItem';
 import {useAppDispatch, useAppSelector} from '../../hooks/storeHooks';
-import {updateUser} from '../../store/slices/userSlice';
 import {RootState} from '../../store/store';
 import {
   getFontFamily,
@@ -26,12 +24,21 @@ import {
 } from '../../utils/helpers';
 import {Category, changeActiveCat} from '../../store/slices/categorySlice';
 import {useEffect, useState} from 'react';
+import {DonationInfo} from '../../store/slices/donationSlice';
+import {RootStackParamList} from '../../utils/types';
+import {StackRoutes} from '../../navigation/routes';
 
 const ITEM_PER_PAGE = 4;
 
-const Home = () => {
+type HomeScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  typeof StackRoutes.home
+>;
+
+const Home = ({navigation}: HomeScreenProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [uiData, setUiData] = useState<Category[]>([]);
+  const [uiCatData, setUiCatData] = useState<Category[]>([]);
+  const [uiDonationsData, setUiDonationsCatData] = useState<DonationInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const {firstName, lastName, avatar} = useAppSelector(
@@ -41,21 +48,33 @@ const Home = () => {
     (state: RootState) => state.category,
   );
 
+  const {donations} = useAppSelector((state: RootState) => state.donation);
+
+  const activeCategory = categories.find(cat => cat.id === activeCatId);
+
+  useEffect(() => {
+    const filteredData = donations.filter(don =>
+      don.categoryIds.includes(activeCatId),
+    );
+    setUiDonationsCatData(filteredData);
+  }, [activeCatId, donations]);
+
   useEffect(() => {
     const fetchCategories = () => {
       setIsLoading(true);
       const data = pagination(categories, ITEM_PER_PAGE, 1);
-      setUiData(data);
-      setCurrentPage(currentPage + 1);
+      setUiCatData(data);
+      setCurrentPage(prevPageNumber => prevPageNumber + 1);
       setIsLoading(false);
     };
 
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.usernameContainer}>
@@ -85,7 +104,7 @@ const Home = () => {
         <View style={styles.tabsContainer}>
           <Header size="medium" title="Select Category" />
           <FlatList
-            data={uiData}
+            data={uiCatData}
             keyExtractor={item => item.id.toString()}
             renderItem={({item}) => (
               <View style={styles.tabButton}>
@@ -104,12 +123,32 @@ const Home = () => {
               if (!isLoading) {
                 setIsLoading(true);
                 const data = pagination(categories, ITEM_PER_PAGE, currentPage);
-                setUiData(prevData => [...prevData, ...data]);
+                setUiCatData(prevData => [...prevData, ...data]);
                 setCurrentPage(currentPage + 1);
                 setIsLoading(false);
               }
             }}
           />
+        </View>
+
+        {/* Donations List */}
+        <View style={styles.donationItemsContainer}>
+          {uiDonationsData.map(don => (
+            <View key={don.donationItemId} style={styles.donationItem}>
+              <DonationItem
+                imageUri={don.image}
+                badgeTitle={activeCategory!.name}
+                price={+don.price}
+                donnationTitle={don.name}
+                onPress={() =>
+                  navigation.navigate(StackRoutes.donation, {
+                    ...don,
+                    category: activeCategory!.name,
+                  })
+                }
+              />
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -121,8 +160,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: verticalScale(16),
-    paddingHorizontal: horizontalScale(24),
+    padding: horizontalScale(14),
     backgroundColor: '#fff',
   },
   headerContainer: {
@@ -151,5 +189,20 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     marginRight: horizontalScale(6),
+  },
+  donationItemsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: verticalScale(16),
+    // gap: horizontalScale(10),
+    justifyContent: 'space-between',
+    // borderColor: 'black',
+    // borderWidth: 1,
+  },
+  donationItem: {
+    width: '48%',
+    marginBottom: verticalScale(23),
+    //     borderColor: 'black',
+    //     borderWidth: 1,
   },
 });

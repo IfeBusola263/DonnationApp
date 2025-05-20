@@ -4,11 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import userReducer from './slices/userSlice';
 import CategoryReducer from './slices/categorySlice';
+import DonationReducer from './slices/donationSlice';
 
 // combine Reducers
 const rootReducer = combineReducers({
   user: userReducer,
   category: CategoryReducer,
+  donation: DonationReducer,
 });
 
 // Persistor configuration
@@ -38,3 +40,5 @@ export const persistor = persistStore(store);
 // Shape of the data stored on the State
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+persistor.purge();
