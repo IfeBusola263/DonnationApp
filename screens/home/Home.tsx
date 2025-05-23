@@ -25,14 +25,14 @@ import {
 import {Category, changeActiveCat} from '../../store/slices/categorySlice';
 import {useEffect, useState} from 'react';
 import {DonationInfo} from '../../store/slices/donationSlice';
-import {RootStackParamList} from '../../utils/types';
+import {type RootStackParamList} from '../../utils/types';
 import {StackRoutes} from '../../navigation/routes';
 
 const ITEM_PER_PAGE = 4;
 
 type HomeScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  typeof StackRoutes.home
+  typeof StackRoutes.donation
 >;
 
 const Home = ({navigation}: HomeScreenProps) => {

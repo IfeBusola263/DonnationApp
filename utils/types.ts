@@ -5,6 +5,8 @@ import {DonationInfo} from '../store/slices/donationSlice';
 export type RootStackParamList = {
   Home: undefined;
   DonationDetails: DonationInfo & {category: string};
+  Login: undefined;
+  Register: undefined;
 };
 
 // prop type for the screens in the main navigation
