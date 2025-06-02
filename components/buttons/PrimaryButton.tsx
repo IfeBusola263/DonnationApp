@@ -1,17 +1,28 @@
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {type PrimaryButtonProps} from './types';
 import {
   getFontFamily,
   horizontalScale,
   scaleFontSize,
+  switchButtonColor,
   verticalScale,
 } from '../../utils/helpers';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 const PrimaryButton = (props: PrimaryButtonProps) => {
   const isTab = props.use === 'tab';
   const [tabWidth, setTabWidth] = useState(0);
   const textRef = useRef<Text>(null);
+  const [bgColor, setBgColor] = useState('blue');
+
+  // useEffect(() => {
+  //   let interval;
+  //   interval = setInterval(() => {
+  //     setBgColor(switchButtonColor());
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   if (isTab) {
     const {isActive, label, onPress} = props;
@@ -52,6 +63,7 @@ const PrimaryButton = (props: PrimaryButtonProps) => {
         styles.button,
         isDisabled && styles.disabled,
         pressed && {opacity: 0.6},
+        // {backgroundColor: bgColor},
       ]}
       disabled={isDisabled}
       onPress={onPress}>

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextInputProps,
   View,
 } from 'react-native';
 import {getFontFamily, scaleFontSize, verticalScale} from '../../utils/helpers';
@@ -12,13 +13,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 
 type InputProps = {
-  value: string;
+  // value: string;
   label: string;
   placeHolder?: string;
   onChangeText: (value: string) => void;
   secureField?: boolean;
   keyboardType?: KeyboardTypeOptions;
-};
+} & TextInputProps;
 
 const Input = ({
   label,
@@ -28,12 +29,13 @@ const Input = ({
   secureField,
   keyboardType,
 }: InputProps) => {
-  const [secureText, setSecureText] = useState(false);
+  const [secureText, setSecureText] = useState(secureField);
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputContainer}>
         <TextInput
+          autoCapitalize="none"
           style={styles.input}
           value={value}
           placeholder={placeHolder ?? 'Enter Data...'}

@@ -7,6 +7,7 @@ export type RootStackParamList = {
   DonationDetails: DonationInfo & {category: string};
   Login: undefined;
   Register: undefined;
+  Payment: {amount: string};
 };
 
 // prop type for the screens in the main navigation

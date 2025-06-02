@@ -1,4 +1,5 @@
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -19,13 +20,16 @@ import PrimaryButton from '../../components/buttons/PrimaryButton';
 import {type NativeStackScreenProps} from '@react-navigation/native-stack';
 import {type RootStackParamList} from '../../utils/types';
 import {StackRoutes} from '../../navigation/routes';
+import {useAppDispatch} from '../../hooks/storeHooks';
+import {loginUser} from '../../api/user';
+import {login} from '../../store/slices/userSlice';
 
 const initialData = {
   email: '',
   password: '',
 };
 
-type formProps = typeof initialData;
+export type LoginProps = typeof initialData;
 type ScreenProps = NativeStackScreenProps<
   RootStackParamList,
   typeof StackRoutes.login
@@ -33,13 +37,41 @@ type ScreenProps = NativeStackScreenProps<
 
 const LoginScreen = ({navigation}: ScreenProps) => {
   const [formData, setFormData] = useState(initialData);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const handleFormInputs = (field: keyof formProps, value: string) => {
-    console.log(value);
+  const handleFormInputs = (field: keyof LoginProps, value: string) => {
     setFormData(prevData => ({...prevData, [field]: value}));
   };
 
-  console.log(formData.email);
+  const handleSubmit = async () => {
+    if (!formData.email || !formData.password) {
+      Alert.alert('Error', 'You need to fill all the fields');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const user = await loginUser(formData);
+
+      if (user.status === 'success') {
+        dispatch(login(user.data));
+        setTimeout(() => {
+          navigation.navigate(StackRoutes.home);
+        }, 1000);
+        return;
+      }
+      throw new Error(user.message);
+    } catch (error) {
+      const err = error as {message: string};
+      // console.log('Error', err?.message);
+      Alert.alert('Error', err?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -55,6 +87,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
             placeHolder="Enter your Email..."
             onChangeText={(value: string) => handleFormInputs('email', value)}
             keyboardType="email-address"
+            editable={isLoading}
           />
           <Input
             value={formData.password}
@@ -62,8 +95,14 @@ const LoginScreen = ({navigation}: ScreenProps) => {
             secureField
             onChangeText={value => handleFormInputs('password', value)}
             placeHolder="*************"
+            editable={isLoading}
           />
-          <PrimaryButton use="button" text="Login" onPress={() => {}} />
+          <PrimaryButton
+            use="button"
+            text={isLoading ? 'Please wait...' : 'Login'}
+            isDisabled={isLoading}
+            onPress={handleSubmit}
+          />
           <Text
             onPress={() => navigation.navigate(StackRoutes.register)}
             style={styles.buttonLabel}>

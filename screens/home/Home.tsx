@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -27,6 +28,10 @@ import {useEffect, useState} from 'react';
 import {DonationInfo} from '../../store/slices/donationSlice';
 import {type RootStackParamList} from '../../utils/types';
 import {StackRoutes} from '../../navigation/routes';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMobileButton, faPowerOff} from '@fortawesome/free-solid-svg-icons';
+import {logout} from '../../api/user';
+import {clearUserData} from '../../store/slices/userSlice';
 
 const ITEM_PER_PAGE = 4;
 
@@ -72,6 +77,19 @@ const Home = ({navigation}: HomeScreenProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleLogout = async () => {
+    Alert.alert('Sign Out', 'Are you sure you want to sign out', [
+      {
+        text: 'Yes',
+        onPress: async () => {
+          await logout();
+          dispatch(clearUserData());
+        },
+      },
+      {text: 'No', style: 'cancel'},
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -81,6 +99,9 @@ const Home = ({navigation}: HomeScreenProps) => {
             <Text style={styles.greetingText}>Hello,</Text>
             <Header size="big" title={`${firstName} .${lastName[0]}👋🏾`} />
           </View>
+          <Pressable onPress={handleLogout}>
+            <FontAwesomeIcon icon={faPowerOff} color="#36455A" />
+          </Pressable>
           <Image
             style={styles.image}
             source={{uri: avatar}}

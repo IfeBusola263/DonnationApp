@@ -19,8 +19,8 @@ type DonationSceenProps = NativeStackScreenProps<
   typeof StackRoutes.donation
 >;
 
-const DonationDetailsScreen = ({route}: DonationSceenProps) => {
-  const {image, category, name, description} = route.params;
+const DonationDetailsScreen = ({navigation, route}: DonationSceenProps) => {
+  const {image, category, name, description, price} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,7 +49,13 @@ const DonationDetailsScreen = ({route}: DonationSceenProps) => {
       </ScrollView>
 
       {/* Button */}
-      <PrimaryButton use="button" text="Donate" onPress={() => {}} />
+      <PrimaryButton
+        use="button"
+        text="Donate"
+        onPress={() =>
+          navigation.navigate(StackRoutes.payment, {amount: price})
+        }
+      />
     </SafeAreaView>
   );
 };

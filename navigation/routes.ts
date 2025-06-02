@@ -5,6 +5,7 @@ type RouteKeys = {
   donation: string;
   login: string;
   register: string;
+  payment: string;
 };
 
 export const StackRoutes: Record<keyof RouteKeys, keyof RootStackParamList> = {
@@ -12,4 +13,5 @@ export const StackRoutes: Record<keyof RouteKeys, keyof RootStackParamList> = {
   donation: 'DonationDetails',
   login: 'Login',
   register: 'Register',
+  payment: 'Payment',
 } as const;

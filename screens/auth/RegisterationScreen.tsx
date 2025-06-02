@@ -46,7 +46,6 @@ const RegisterationScreen = ({navigation}: ScreenProps) => {
     field: keyof RegisterationformProps,
     value: string,
   ) => {
-    console.log(value);
     setFormData(prevData => ({...prevData, [field]: value}));
   };
 
@@ -60,10 +59,19 @@ const RegisterationScreen = ({navigation}: ScreenProps) => {
 
     try {
       const user = await createUser(formData);
-      dispatch(updateUser({firstName: user?.user.displayName!}));
-      navigation.navigate(StackRoutes.home);
+
+      if (!user.success) {
+        throw new Error(user.error);
+      }
+      dispatch(updateUser({firstName: user.data?.user.displayName!}));
+      Alert.alert('Registeration Successful!');
+      setTimeout(() => {
+        navigation.goBack();
+      }, 3000);
     } catch (error) {
-      Alert.alert('Error', 'Something Went Wrong!');
+      const err = error as {message: string};
+      // console.log('Error', err?.message);
+      Alert.alert('Error', err?.message);
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +109,7 @@ const RegisterationScreen = ({navigation}: ScreenProps) => {
           />
           <PrimaryButton
             use="button"
-            text="Register"
+            text={!isLoading ? 'Register' : 'Please wait...'}
             onPress={handleSubmit}
             isDisabled={isLoading}
           />
