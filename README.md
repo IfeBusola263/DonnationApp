@@ -43,8 +43,6 @@ A simple and intuitive donation app built with **React Native CLI**, designed to
   </tr>
 </table>
 
-![Home Screen](./assets/screenshots/home.png)
-
 ---
 
 ## 🛠️ Tech Stack
