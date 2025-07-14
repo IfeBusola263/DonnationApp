@@ -99,9 +99,9 @@ const Home = ({navigation}: HomeScreenProps) => {
             <Text style={styles.greetingText}>Hello,</Text>
             <Header size="big" title={`${firstName} .${lastName[0]}👋🏾`} />
           </View>
-          <Pressable onPress={handleLogout}>
+          {/* <Pressable onPress={handleLogout}>
             <FontAwesomeIcon icon={faPowerOff} color="#36455A" />
-          </Pressable>
+          </Pressable> */}
           <Image
             style={styles.image}
             source={{uri: avatar}}
