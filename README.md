@@ -118,11 +118,6 @@ For major changes, please open an issue first to discuss your ideas.
 
 ---
 
-## 📄 License
-This project is licensed under the **MIT License**.
-
----
-
 ## 📬 Contact
 For questions, feedback, or collaboration opportunities:
 - GitHub: [https://github.com/IfeBusola263](https://github.com/IfeBusola263)
