@@ -22,7 +22,7 @@ A simple and intuitive donation app built with **React Native CLI**, designed to
     <td>Home List</td>
   </tr>
   <tr>
-    <td><img src="assets/screenshots/home.png" width="300"/></td>
+    <td><img src="./assets/screenshots/home.png" width="300"/></td>
     <td><img src="./assets/screenshots/home_list.png" width="300"/></td>
   </tr>
   <tr>
